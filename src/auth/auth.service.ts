@@ -18,16 +18,15 @@ export class AuthService {
     this.usersRepository.createUser(authCredentialsDto);
   }
 
-  async signIn(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ accessToken: string }> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<any> {
     const { username, password } = authCredentialsDto;
     const user = await this.usersRepository.findOne({ where: { username } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { username };
       const accessToken: string = this.jwtSerice.sign(payload);
-      return { accessToken };
+
+      return { ac: accessToken, ...user };
     } else {
       throw new UnauthorizedException('pls check your credentials');
     }
