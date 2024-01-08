@@ -3,7 +3,7 @@ import { Task } from './task.entity';
 
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskStatus } from './task-status.enum';
+
 import { GetTaskFilterDto } from './dto/get-task-filter.dto';
 
 // The repository is a class responsible for encapsulating the logic
@@ -22,7 +22,6 @@ export class TasksRepository extends Repository<Task> {
   constructor(private dataSource: DataSource) {
     super(Task, dataSource.createEntityManager());
   }
-
   async getTasks(filterDto: GetTaskFilterDto): Promise<Task[]> {
     const query = this.createQueryBuilder('task');
 
@@ -32,7 +31,6 @@ export class TasksRepository extends Repository<Task> {
     const tasks = await query.getMany();
     return tasks;
   }
-
   async getTranslations(lang) {
     const transformedObject = {};
     const tasks = await this.find();
@@ -69,9 +67,9 @@ export class TasksRepository extends Repository<Task> {
 
     return transformedObject;
   }
-
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const { app, component, key, en, de, rs, description } = createTaskDto;
+    const { app, component, key, en, de, rs, uniqueKey, description } =
+      createTaskDto;
     const task = this.create({
       app,
       component,
@@ -79,6 +77,7 @@ export class TasksRepository extends Repository<Task> {
       en,
       de,
       rs,
+      uniqueKey,
       description,
     });
     await this.save(task);

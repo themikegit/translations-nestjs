@@ -16,5 +16,8 @@ export class CreateTaskDto {
 
   rs: string;
 
+  @IsNotEmpty()
+  uniqueKey: string;
+
   description: string;
 }
