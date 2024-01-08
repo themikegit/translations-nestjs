@@ -1,15 +1,12 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTaskFilterDto } from './dto/get-task-filter.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { TasksRepository } from './task.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
-
+import { TaskStatus } from './task-status.enum';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -29,18 +26,9 @@ export class TaskService {
     return this.tasksRepository.getTranslations(lang);
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const duplicate = await this.tasksRepository.findOne({
-      where: { uniqueKey: createTaskDto.uniqueKey },
-    });
-
-    if (duplicate) {
-      throw new HttpException('Duplicate key value', HttpStatus.CONFLICT);
-    }
-    const result = await this.tasksRepository.createTask(createTaskDto);
-    // this.taskEvenet.next(createTaskDto)
-
-    return result;
+  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    this.taskEvenet.next(createTaskDto);
+    return this.tasksRepository.createTask(createTaskDto);
   }
 
   async getTaskById(id: string): Promise<Task> {
@@ -61,9 +49,10 @@ export class TaskService {
   async updateTranslationOb(
     id: string,
     translationObBody: CreateTaskDto,
-  ): Promise<CreateTaskDto> {
+  ): Promise<Task> {
     const task = await this.getTaskById(id);
+
     await this.tasksRepository.save(translationObBody);
-    return translationObBody;
+    return task;
   }
 }
