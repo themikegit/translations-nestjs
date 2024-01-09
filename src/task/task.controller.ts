@@ -24,12 +24,7 @@ import { ConfigService } from '@nestjs/config';
 @Controller('task')
 // @UseGuards(AuthGuard())
 export class TaskController {
-  constructor(
-    private tasksService: TaskService,
-    private configService: ConfigService,
-  ) {
-    console.log(this.configService.get('TEST_VALUE'));
-  }
+  constructor(private tasksService: TaskService) {}
 
   @Get()
   getTasks(@Query() filterDto: GetTaskFilterDto): Promise<Task[]> {

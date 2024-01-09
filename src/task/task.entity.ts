@@ -29,5 +29,8 @@ export class Task {
   rs: string;
 
   @Column()
+  uniqueKey: string;
+
+  @Column()
   description: string;
 }

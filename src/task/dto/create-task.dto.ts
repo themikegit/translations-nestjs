@@ -16,5 +16,7 @@ export class CreateTaskDto {
 
   rs: string;
 
+  uniqueKey: string;
+
   description: string;
 }
