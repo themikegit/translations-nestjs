@@ -3,6 +3,7 @@ import { TaskModule } from './task/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { StructureModule } from './structure/structure/structure.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       envFilePath: [`.env.stage.${process.env.STAGE}`],
     }),
     TaskModule,
+    StructureModule,
     ///waiting for config module, so its async, to get variables from specifig stage (dev or prod)
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
