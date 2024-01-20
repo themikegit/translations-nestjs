@@ -3,7 +3,7 @@ import { TaskModule } from './task/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { StructureModule } from './structure/structure/structure.module';
+import { StructureModule } from './structure/structure.module';
 
 @Module({
   imports: [
